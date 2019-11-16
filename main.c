@@ -9,6 +9,10 @@
 int main() {
   int total = 0;
   DIR * dir = opendir(".");
+  if (dir == NULL) {
+    return 0;
+  }
+
   struct dirent * info = readdir(dir);
   struct stat metadata;
   printf("Statistics for directory: . \n");

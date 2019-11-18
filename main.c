@@ -7,15 +7,20 @@
 
 //Use sprintf and only go through directory once at the cost of memory or
 //go through directory twice?
-int main() {
+int main(int argc, char *argv[]) {
   char dirName[20];
-  printf("Please input the name of a directory: ");
-  fgets(dirName, 20, stdin);
-  strtok(dirName, "\n"); //remove the ending newline
+  if (argc > 1) { //use command line arguments
+    strncpy(dirName, argv[1], 20);
+  } else {
+    printf("Please input the name of a directory: ");
+    fgets(dirName, 20, stdin);
+  }
 
+  strtok(dirName, "\n"); //remove the ending newline
   int total = 0;
   DIR * dir = opendir(dirName);
   if (dir == NULL) {
+    printf(" >> %s \n", strerror(errno));
     return 0;
   }
 

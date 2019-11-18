@@ -3,12 +3,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <string.h>
 
 //Use sprintf and only go through directory once at the cost of memory or
 //go through directory twice?
 int main() {
+  char dirName[20];
+  printf("Please input the name of a directory: ");
+  fgets(dirName, 20, stdin);
+  strtok(dirName, "\n"); //remove the ending newline
+
   int total = 0;
-  DIR * dir = opendir(".");
+  DIR * dir = opendir(dirName);
   if (dir == NULL) {
     return 0;
   }

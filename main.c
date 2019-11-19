@@ -8,12 +8,12 @@
 //Use sprintf and only go through directory once at the cost of memory or
 //go through directory twice?
 int main(int argc, char *argv[]) {
-  char dirName[20];
+  char dirName[40];
   if (argc > 1) { //use command line arguments
-    strncpy(dirName, argv[1], 20);
+    strncpy(dirName, argv[1], 40);
   } else {
     printf("Please input the name of a directory: ");
-    fgets(dirName, 20, stdin);
+    fgets(dirName, 40, stdin);
   }
 
   strtok(dirName, "\n"); //remove the ending newline
@@ -26,12 +26,14 @@ int main(int argc, char *argv[]) {
 
   struct dirent * info = readdir(dir);
   struct stat metadata;
-  printf("Statistics for directory: . \n");
+  printf("Statistics for directory: %s \n", dirName);
   printf("Directories: \n");
 
   //Find stuff related to directories first
   while (info != NULL) {
-    stat(info -> d_name, &metadata);
+    char path[300];
+    sprintf(path, "%s/%s", dirName, info -> d_name);
+    stat(path, &metadata);
     if (S_ISDIR(metadata.st_mode)) {
       printf(" > %s \n", info -> d_name);
     }
@@ -45,7 +47,9 @@ int main(int argc, char *argv[]) {
   //Then find regular files
   info = readdir(dir);
   while (info != NULL) {
-    stat(info -> d_name, &metadata);
+    char path[300];
+    sprintf(path, "%s/%s", dirName, info -> d_name);
+    stat(path, &metadata);
     if (S_ISREG(metadata.st_mode)) {
       printf(" > %s \n", info -> d_name);
       total += metadata.st_size;
